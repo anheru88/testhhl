@@ -10,8 +10,16 @@ class Pedido extends Eloquent
 {
     protected $table = "pedidos";
 
+    protected $casts = [
+        'created_at' => 'date:Y-m-d',
+    ];
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function cliente()
     {
-        $this->belongsTo(Cliente::class);
+        return $this->belongsTo(Cliente::class);
     }
 }

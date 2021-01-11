@@ -19,7 +19,8 @@ class Router
 
     /**
      * Router constructor.
-     * @param Request $request
+     *
+     * @param Request  $request
      * @param Response $response
      */
     public function __construct(Request $request, Response $response)
@@ -43,37 +44,36 @@ class Router
         $vars = [];
         $method = $this->request->method();
         $path = $this->request->getPath();
-        foreach ($this->routes[$method] as $key => $value) {
-            if (preg_match_all('/{.+}/', $key, $match)) {
-                $array_key = explode("/", $key);
-                $array_path = explode("/", $path);
-                if (count($array_key) === count($array_path)) {
-                    for ($i = 0; $i < count($array_key); $i++) {
-                        if($array_key[$i] !== $array_path[$i]){
-                            if (preg_match_all('/{.+}/', $array_key[$i], $match)) {
-                                $var = str_replace("{", "", $array_key[$i]);
-                                $var = str_replace("}", "", $var);
-                                $v[$var] = $array_path[$i];
-                                array_push($vars, $v);
+
+        $callback = $this->routes[$method][$path] ?? false;
+
+        if ($callback === false) {
+            foreach ($this->routes[$method] as $key => $value) {
+                if (preg_match_all('/{.+}/', $key, $match)) {
+                    $array_key = explode("/", $key);
+                    $array_path = explode("/", $path);
+                    if (count($array_key) === count($array_path)) {
+                        for ($i = 0; $i < count($array_key); $i++) {
+                            if($array_key[$i] !== $array_path[$i]) {
+                                if (preg_match_all('/{.+}/', $array_key[$i], $match)) {
+                                    array_push($vars, $array_path[$i]);
+                                }
+
+                                break;
                             }
                         }
                     }
                 }
             }
-        }
 
-        if (!empty($vars)){
-            array_push($vars, $this->request);
-            $value[0] = new $value[0]();
-            return call_user_func_array($value,$vars);
-        }
+            if (!empty($vars)) {
+                array_push($vars, $this->request);
+                $value[0] = new $value[0]();
+                return call_user_func_array($value, $vars);
+            }
 
-        $callback = $this->routes[$method][$path] ?? false;
-
-        if ($callback === false) {
             $this->response->setStatusCode(404);
-            echo "Not Found";
-            exit;
+            return $this->renderView('_404');
         }
         if (is_string($callback)) {
             return $this->renderView($callback);

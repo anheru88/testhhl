@@ -1,6 +1,13 @@
 <div class="row">
-    <div class="col-md-12">
-        <h2>Clientes</h2>
+    <div class="col-md-12" style="margin-top: 15px">
+        <div class="row">
+            <div class="col-md-9">
+                <h2>Clientes</h2>
+            </div>
+            <div class="col-md-3">
+                <a href="/clientes/create" class="btn btn-primary">Crear Cliente</a>
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table table-striped table-sm">
                 <thead>
@@ -20,7 +27,7 @@
                     echo $cliente->id;
                     echo "</td>";
                     echo "<td>";
-                    echo $cliente->name;
+                    echo $cliente->nombre;
                     echo "</td>";
                     echo "<td>";
                     echo $cliente->email;
@@ -30,7 +37,7 @@
                     echo "</td>";
                     echo '<td>
                             <div class="btn-group">
-                              <a href="/clientes/' . $cliente->id . '" class="btn btn-primary active" aria-current="page">Ver</a>
+                              <a href="/clientes/' . $cliente->id . '" class="btn btn-primary" aria-current="page">Ver</a>
                               <a href="#" class="btn btn-primary">Editar</a>
                               <a href="#" class="btn btn-primary">Eliminar</a>
                             </div>
@@ -40,7 +47,6 @@
                 ?>
                 </tbody>
             </table>
-
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     <?php

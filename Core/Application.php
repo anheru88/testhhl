@@ -4,6 +4,7 @@ namespace App\Core;
 
 /**
  * Class Application
+ *
  * @package App\Core
  */
 class Application
@@ -33,6 +34,7 @@ class Application
 
     /**
      * Application constructor.
+     *
      * @param string $rootPath
      */
     public function __construct(string $rootPath)
