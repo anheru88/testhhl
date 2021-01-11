@@ -40,9 +40,36 @@ class Router
 
     public function resolve()
     {
+        $vars = [];
+        $method = $this->request->method();
         $path = $this->request->getPath();
-        $method = $this->request->getMethod();
+        foreach ($this->routes[$method] as $key => $value) {
+            if (preg_match_all('/{.+}/', $key, $match)) {
+                $array_key = explode("/", $key);
+                $array_path = explode("/", $path);
+                if (count($array_key) === count($array_path)) {
+                    for ($i = 0; $i < count($array_key); $i++) {
+                        if($array_key[$i] !== $array_path[$i]){
+                            if (preg_match_all('/{.+}/', $array_key[$i], $match)) {
+                                $var = str_replace("{", "", $array_key[$i]);
+                                $var = str_replace("}", "", $var);
+                                $v[$var] = $array_path[$i];
+                                array_push($vars, $v);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!empty($vars)){
+            array_push($vars, $this->request);
+            $value[0] = new $value[0]();
+            return call_user_func_array($value,$vars);
+        }
+
         $callback = $this->routes[$method][$path] ?? false;
+
         if ($callback === false) {
             $this->response->setStatusCode(404);
             echo "Not Found";
@@ -52,11 +79,12 @@ class Router
             return $this->renderView($callback);
         }
 
-        if (is_array($callback)){
+        if (is_array($callback)) {
             $callback[0] = new $callback[0]();
         }
-        return call_user_func($callback);
+        return call_user_func($callback, $this->request);
     }
+
 
     public function renderView($view, $params = [])
     {
@@ -74,7 +102,7 @@ class Router
 
     protected function renderOnlyView($view, $params = [])
     {
-        foreach ($params as $key => $value ) {
+        foreach ($params as $key => $value) {
             $$key = $value;
         }
         ob_start();

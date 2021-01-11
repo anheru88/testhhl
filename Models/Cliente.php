@@ -4,7 +4,14 @@
 namespace App\Models;
 
 
-class Cliente
-{
+use Illuminate\Database\Eloquent\Model as Eloquent;
 
+class Cliente extends Eloquent
+{
+    protected $table = "clientes";
+
+    public function pedidos()
+    {
+        return $this->hasMany(Pedido::class);
+    }
 }
