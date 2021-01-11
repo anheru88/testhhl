@@ -1,0 +1,12 @@
+{
+    "name": "anheru88/testhhl",
+    "description": "Test para hhl",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Angel Jimenez",
+            "email": "ajimenez@digitalcaribe.com.co"
+        }
+    ],
+    "require": {}
+}
