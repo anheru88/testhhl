@@ -1,6 +1,6 @@
 # MVC nativo
 
-En este proyecto se implementa un MVC en php haciendolo desde 0, sin ningún tipo de framework.
+En este proyecto se implementa un MVC en php haciendolo desde 0, sin ningún tipo de framework. **Usar PHP 7.4, en versiones anteriores no funciona. El root path es la carpeta public**
 
 El proyecto está dividido en las siguientes carpetas:
 
